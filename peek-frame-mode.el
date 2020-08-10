@@ -99,26 +99,23 @@ Defaults to nil."
       (delete-frame frame)))
   (select-frame-set-input-focus (selected-frame)))
 
-(defvar peek-frame-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map
-      (kbd "q") 'peek-frame-quit)
-    (define-key map
-      (kbd "C-g") 'peek-frame-quit)
-    (define-key map
-      (kbd "M-,") (lambda ()
-                    (interactive)
-                    (let ((p (frame-parent)))
-                      (delete-frame)
-                      (select-frame-set-input-focus p))))
-    map))
-
 ;;;###autoload
 (define-minor-mode peek-frame-mode
   "Minor mode for peek frame buffers."
   :group 'peek-frame-mode
   :global t
-  :lighter ""
+  :lighter " Pf"
+  :keymap (let ((map (make-sparse-keymap)))
+	    (define-key map
+	      (kbd "q") 'peek-frame-quit)
+	    (define-key map
+	      (kbd "C-g") 'peek-frame-quit)
+	    (define-key map
+	      (kbd "M-,") (lambda () (interactive)
+			    (let ((p (frame-parent)))
+			      (delete-frame)
+			      (select-frame-set-input-focus p))))
+	    map)
   (cond
    (peek-frame-mode
     (setq-local frame-auto-hide-function 'peek-frame-quit)
